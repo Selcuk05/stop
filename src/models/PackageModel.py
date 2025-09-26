@@ -3,8 +3,6 @@ from typing import Union, Literal
 
 from sdks.novavision.src.base.model import Inputs,Input, Package, Output, Config, Configs, Outputs, Response, Request
 
-########################################################################
-
 class OutputOnData(Output):
     name: Literal["outputOnData"] = "outputOnData"
     value: Union[list, dict]
@@ -213,8 +211,6 @@ class OnDataExecutor(Config):
             }
         }
 
-########################################################################
-
 class OutputOnExpression(Output):
     name: Literal["outputOnExpression"] = "outputOnExpression"
     value: Union[list, dict]
@@ -299,7 +295,6 @@ class OnExpressionExecutor(Config):
             }
         }
 
-########################################################################
 
 class ConfigExecutor(Config):
     name: Literal["ConfigExecutor"] = "ConfigExecutor"

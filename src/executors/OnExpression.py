@@ -15,7 +15,7 @@ class OnExpression(Component):
         super().__init__(request, bootstrap)
         self.request.model = PackageModel(**(self.request.data))
         self.input = self.request.get_param("inputDataOnExpression")
-        self.inputExpression = self.request.get_params("inputExpressionOnExpression")
+        self.inputExpression = self.request.get_param("inputExpressionOnExpression")
         self.statement_status = self.request.get_param("stopStatementStatus")
         self.check_exists = self.request.get_param("onExpressionCheckExists")
         self.expression = self.request.get_param("dataExpression")  # aranacak expression
