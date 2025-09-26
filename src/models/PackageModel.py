@@ -1,10 +1,12 @@
 
 from typing import Union, Literal
+
 from sdks.novavision.src.base.model import Inputs,Input, Package, Output, Config, Configs, Outputs, Response, Request
 
+########################################################################
 
-class OutputStop(Output):
-    name: Literal["outputStop"] = "outputStop"
+class OutputOnData(Output):
+    name: Literal["outputOnData"] = "outputOnData"
     value: Union[list, dict]
     type: str = "object"
 
@@ -12,8 +14,8 @@ class OutputStop(Output):
         title = "Data"
 
 
-class InputStop(Input):
-    name: Literal["inputStop"] = "inputStop"
+class InputOnData(Input):
+    name: Literal["inputOnData"] = "inputOnData"
     value: Union[list, dict]
     type: str = "object"
 
@@ -66,13 +68,13 @@ class StopStatementStatus(Config):
 
 
 class DataExpressionTrue(Config):
- name: Literal["True"] = "True"
- value: Literal[True] = True
- type: Literal["bool"] = "bool"
- field: Literal["option"] = "option"
+    name: Literal["True"] = "True"
+    value: Literal[True] = True
+    type: Literal["bool"] = "bool"
+    field: Literal["option"] = "option"
 
- class Config:
-     title = "True"
+    class Config:
+        title = "True"
 
 
 class DataExpressionFalse(Config):
@@ -99,6 +101,38 @@ class DataExpression(Config):
     class Config:
         title = "Expression Status"
 
+class SelectionExpressionOne(Config):
+    name: Literal["One"] = "One"
+    value: Literal["One"] = "One"
+    type: Literal["string"] = "string"
+    field: Literal["option"] = "option"
+
+    class Config:
+        title = "One"
+
+
+class SelectionExpressionAll(Config):
+    name: Literal["All"] = "All"
+    value: Literal["All"] = "All"
+    type: Literal["string"] = "string"
+    field: Literal["option"] = "option"
+
+    class Config:
+        title = "All"
+
+
+class SelectionExpression(Config):
+    """
+        Choose to select based on a single item's truth or all items' truth.
+    """
+    name: Literal["selectionExpression"] = "selectionExpression"
+    value: Union[SelectionExpressionOne, SelectionExpressionAll]
+    type: Literal["object"] = "object"
+    field: Literal["dropdownlist"] = "dropdownlist"
+
+    class Config:
+        title = "Selection Expression"
+
 
 class CheckExistsTrue(Config):
     name: Literal["True"] = "True"
@@ -107,28 +141,29 @@ class CheckExistsTrue(Config):
     field: Literal["option"] = "option"
 
     class Config:
-        title = "Enable"
+        title = "No Data"
 
 
 class CheckExistsFalse(Config):
     dataExpression: DataExpression
+    selectionExpression: SelectionExpression
     name: Literal["False"] = "False"
     value: Literal[False] = False
     type: Literal["bool"] = "bool"
     field: Literal["option"] = "option"
 
     class Config:
-        title = "Disable"
+        title = "Data Available"
 
 
-class StopCheckExists(Config):
+class OnDataCheckExists(Config):
     """
         Controls behavior based on the presence or content of the input.
 
-        - `Enable`: Acts if the value is missing.
-        - `Disable`: Acts based on a condition inside the input (e.g., confidence > 5).
+        - `No Data`: Acts if the value is missing.
+        - `Data Available`: Acts based on a condition inside the input (e.g., confidence > 5).
     """
-    name: Literal["stopCheckExists"] = "stopCheckExists"
+    name: Literal["onDataCheckExists"] = "onDataCheckExists"
     value: Union[CheckExistsTrue, CheckExistsFalse]
     type: Literal["object"] = "object"
     field: Literal["dependentDropdownlist"] = "dependentDropdownlist"
@@ -137,26 +172,26 @@ class StopCheckExists(Config):
         title = "Check Exists"
 
 
-class StopConfigs(Configs):
-    stopCheckExists: StopCheckExists
+class OnDataConfigs(Configs):
+    onDataCheckExists: OnDataCheckExists
     stopStatementStatus: StopStatementStatus
 
 
-class StopInputs(Inputs):
-    inputStop: InputStop
+class OnDataInputs(Inputs):
+    inputOnData: InputOnData
 
 
-class StopOutputs(Outputs):
-    outputStop: OutputStop
+class OnDataOutputs(Outputs):
+    outputOnData: OutputOnData
 
 
-class StopResponse(Response):
-    outputs: StopOutputs
+class OnDataResponse(Response):
+    outputs: OnDataOutputs
 
 
-class StopRequest(Request):
-    inputs: StopInputs
-    configs: StopConfigs
+class OnDataRequest(Request):
+    inputs: OnDataInputs
+    configs: OnDataConfigs
 
     class Config:
         json_schema_extra = {
@@ -164,33 +199,116 @@ class StopRequest(Request):
         }
 
 
-class StopExecutor(Config):
-    name: Literal["Stop"] = "Stop"
-    value: Union[StopRequest, StopResponse]
+class OnDataExecutor(Config):
+    name: Literal["OnData"] = "OnData"
+    value: Union[OnDataRequest, OnDataResponse]
     type: Literal["object"] = "object"
     field: Literal["option"] = "option"
 
     class Config:
-        title = "Stop"
+        title = "On Data"
         json_schema_extra = {
             "target": {
                 "value": 0
             }
         }
 
+########################################################################
+
+class OutputOnExpression(Output):
+    name: Literal["outputOnExpression"] = "outputOnExpression"
+    value: Union[list, dict]
+    type: str = "object"
+
+    class Config:
+        title = "Data"
+
+
+class InputDataOnExpression(Input):
+    name: Literal["inputDataOnExpression"] = "inputDataOnExpression"
+    value: Union[list, dict]
+    type: str = "object"
+
+    class Config:
+        title = "Data"
+
+class InputExpressionOnExpression(Input):
+    name: Literal["inputExpressionOnExpression"] = "inputExpressionOnExpression"
+    value: Union[list, dict]
+    type: str = "object"
+
+    class Config:
+        title = "Expression"
+
+
+class OnExpressionCheckExists(Config):
+    """
+        Controls behavior based on the presence or content of the input.
+
+        - `No Data`: Acts if the value is missing.
+        - `Data Available`: Acts based on a condition inside the input (e.g., confidence > 5).
+    """
+    name: Literal["onExpressionCheckExists"] = "onExpressionCheckExists"
+    value: Union[CheckExistsTrue, CheckExistsFalse]
+    type: Literal["object"] = "object"
+    field: Literal["dependentDropdownlist"] = "dependentDropdownlist"
+
+    class Config:
+        title = "Check Exists"
+
+
+class OnExpressionConfigs(Configs):
+    onExpressionCheckExists: OnExpressionCheckExists
+    stopStatementStatus: StopStatementStatus
+
+
+class OnExpressionInputs(Inputs):
+    inputDataOnExpression: InputDataOnExpression
+    inputExpressionOnExpression: InputExpressionOnExpression
+
+
+class OnExpressionOutputs(Outputs):
+    outputOnExpression: OutputOnExpression
+
+
+class OnExpressionResponse(Response):
+    outputs: OnExpressionOutputs
+
+
+class OnExpressionRequest(Request):
+    inputs: OnExpressionInputs
+    configs: OnExpressionConfigs
+
+    class Config:
+        json_schema_extra = {
+            "target": "configs"
+        }
+
+
+class OnExpressionExecutor(Config):
+    name: Literal["OnExpression"] = "OnExpression"
+    value: Union[OnExpressionRequest, OnExpressionResponse]
+    type: Literal["object"] = "object"
+    field: Literal["option"] = "option"
+
+    class Config:
+        title = "On Expression"
+        json_schema_extra = {
+            "target": {
+                "value": 0
+            }
+        }
+
+########################################################################
 
 class ConfigExecutor(Config):
     name: Literal["ConfigExecutor"] = "ConfigExecutor"
-    value: Union[StopExecutor]
+    value: Union[OnDataExecutor, OnExpressionExecutor]
     type: Literal["executor"] = "executor"
     field: Literal["dependentDropdownlist"] = "dependentDropdownlist"
 
     class Config:
-        title = "Task"
-        json_schema_extra = {
-            "target": "value"
-        }
-
+        title = "On Operation"
 
 class PackageConfigs(Configs):
     executor: ConfigExecutor
